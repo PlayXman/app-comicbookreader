@@ -4,8 +4,11 @@ import {createMuiTheme, ThemeProvider} from '@material-ui/core';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Home from "./views/Home";
 import NoMatch from "./views/NoMatch";
+import config from "./config";
+import Login from "./views/Login";
 
-const theme = createMuiTheme({});
+// MUI Theme init
+const theme = createMuiTheme(config.theme);
 
 function App() {
   return (
@@ -13,10 +16,13 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            <Home />
+            <Home/>
+          </Route>
+          <Route path="/login">
+            <Login/>
           </Route>
           <Route path="*">
-            <NoMatch />
+            <NoMatch/>
           </Route>
         </Switch>
       </Router>
