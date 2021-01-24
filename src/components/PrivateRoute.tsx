@@ -3,19 +3,19 @@ import {Redirect, Route, RouteProps} from "react-router-dom";
 import {useContext} from "./DataContext";
 
 const PrivateRoute: React.FC<RouteProps> = ({children, ...rest}) => {
-  const currentUser = useContext().user;
+  const {data} = useContext();
 
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        currentUser.length ? (
+        data.user.length ? (
           children
         ) : (
           <Redirect
             to={{
               pathname: "/login",
-              state: { from: location }
+              state: {from: location}
             }}
           />
         )

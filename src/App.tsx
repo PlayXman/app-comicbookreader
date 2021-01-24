@@ -17,8 +17,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline/>
-      <DataProvider>
-        <Router>
+      <Router>
+        <DataProvider>
           <Layout>
             <Authentication>
               <Switch>
@@ -34,8 +34,8 @@ function App() {
               </Switch>
             </Authentication>
           </Layout>
-        </Router>
-      </DataProvider>
+        </DataProvider>
+      </Router>
     </ThemeProvider>
   );
 }

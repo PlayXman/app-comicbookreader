@@ -9,14 +9,14 @@ interface AuthenticationProps {
 
 const Authentication: React.FC<AuthenticationProps> = ({children}) => {
   const [loaded, setLoaded] = useState(false);
-  const context = useContext();
+  const {setData} = useContext();
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      context.user = user ? user.uid : '';
+      setData({user: user ? user.uid : ''});
       setLoaded(true);
     });
-  }, [context]);
+  }, [setData]);
 
   if(loaded) {
     return children;

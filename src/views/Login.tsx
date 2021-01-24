@@ -14,8 +14,10 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = (props) => {
+  //todo
+
   return (
-    <StyledFirebaseAuth uiConfig={firebaseUiConfig} firebaseAuth={firebase.auth()} />
+    <StyledFirebaseAuth uiConfig={firebaseUiConfig} firebaseAuth={firebase.auth()}/>
   );
 };
 
