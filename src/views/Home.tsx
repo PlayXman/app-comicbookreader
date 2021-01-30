@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
-import {Container, Fab, makeStyles, Typography} from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
+import {Container, makeStyles, Typography} from "@material-ui/core";
 import BookList from "../components/BookList";
 import Books from "../models/Books";
 import {useContext} from "../components/DataContext";
+import NewBook from "../components/NewBook";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,11 +13,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginBottom: theme.spacing(2)
   },
-  addButton: {
-    position: 'fixed',
-    bottom: theme.spacing(2),
-    right: theme.spacing(2)
-  }
 }));
 
 const Home: React.FC = () => {
@@ -37,9 +32,7 @@ const Home: React.FC = () => {
 
         <BookList/>
       </Container>
-      <Fab color="secondary" size="medium" className={classes.addButton}>
-        <AddIcon/>
-      </Fab>
+      <NewBook/>
     </>
   );
 };

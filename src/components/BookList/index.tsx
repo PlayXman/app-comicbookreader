@@ -12,7 +12,7 @@ const BookList: React.FC = () => {
     <Grid container spacing={2}>
       {comicBooks.length ? (
         comicBooks.map((book) => (
-          <Grid key={book.id} item xs={12} sm={6} md={4}>
+          <Grid key={book.key} item xs={12} sm={6} md={4}>
             <Book
               title={book.title}
               coverImageSrc={book.coverImage}

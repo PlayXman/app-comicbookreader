@@ -1,9 +1,9 @@
 import React, {createContext, useContext as useReactContext} from "react";
-import {ComicBook} from "../models/Book";
+import Book from "../models/Book";
 
 interface Context {
   user: string;
-  comicBooks?: ComicBook[];
+  comicBooks?: Book[];
 }
 
 type OptionalContext = Partial<Context>;

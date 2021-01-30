@@ -9,6 +9,7 @@ const config: Config = {
   firebase: {
     apiKey: "AIzaSyAGpSQbBWbJ4LEHJTxGQpw1acMZDC4A2IY",
     authDomain: "aa-comics.firebaseapp.com",
+    databaseURL: "https://aa-comics-default-rtdb.firebaseio.com",
     projectId: "aa-comics",
     storageBucket: "aa-comics.appspot.com",
     messagingSenderId: "498744253919",

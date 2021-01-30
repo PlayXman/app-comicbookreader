@@ -1,16 +1,31 @@
 import Book, {ComicBook} from "./Book";
+import firebase from "firebase";
+import User from "./User";
+
+export const DB_NAME = 'books';
 
 class Books {
-  static async getAll(): Promise<ComicBook[] | undefined> {
-    //todo whole func
-    const book = new Book();
-    book.title = 'Voyage at the parallel universe was the devastation';
-    book.coverImage = 'https://img.cinemablend.com/filter:scale/quill/3/d/b/a/9/8/3dba98f3b6b3acd1a05018c9958d3cebce9cd25f.jpg?mw=600';
+  static async getAll(): Promise<Book[] | undefined> {
+    const userId = User.getUid();
+    const snapshot = await firebase.database().ref(`${userId}/${DB_NAME}`).once('value');
 
-    return [
-      book,
-      book,
-    ];
+    if (snapshot.exists()) {
+      const results: Book[] = [];
+
+      snapshot.forEach((book) => {
+        results.push(new Book(book.val()));
+      });
+
+      return results;
+    }
+
+    return [];
+  }
+
+  static async createNewBook(comicBook: ComicBook) {
+    const book = new Book(comicBook);
+
+    return book.save();
   }
 }
 

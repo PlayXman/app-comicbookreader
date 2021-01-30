@@ -7,14 +7,13 @@ import config from "./config";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/storage";
+import "firebase/database";
 
 // Firebase init
 firebase.initializeApp(config.firebase);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <App/>,
   document.getElementById('root')
 );
 
