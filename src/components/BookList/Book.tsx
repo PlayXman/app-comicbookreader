@@ -43,8 +43,10 @@ const Book: React.FC<BookProps> = ({bookModel}) => {
             {bookModel.title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            <ImportContactsTwoToneIcon fontSize="small"
-                                       className={classes.pageCountIcon}/> {bookModel.currentPageIndex + 1}/{bookModel.totalPageCount}
+            <ImportContactsTwoToneIcon
+              fontSize="small"
+              className={classes.pageCountIcon}
+            /> {bookModel.currentPageIndex + 1}/{bookModel.totalPageCount}
           </Typography>
         </CardContent>
       </CardActionArea>
