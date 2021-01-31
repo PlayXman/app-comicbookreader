@@ -12,8 +12,8 @@ import {
   Toolbar,
   Typography
 } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import AddIcon from "@material-ui/icons/Add";
+import CloseTwoToneIcon from '@material-ui/icons/CloseTwoTone';
+import AddTwoToneIcon from '@material-ui/icons/AddTwoTone';
 import FormContent from './FormContent';
 
 const useStyles = makeStyles((theme) => ({
@@ -81,13 +81,13 @@ const NewBook: React.FC = () => {
   return (
     <>
       <Fab color="secondary" size="medium" className={classes.addButton} onClick={handleOpen}>
-        <AddIcon/>
+        <AddTwoToneIcon/>
       </Fab>
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose}>
-              <CloseIcon/>
+              <CloseTwoToneIcon/>
             </IconButton>
             <Typography variant="h6" className={classes.title}>
               Add Comic Book

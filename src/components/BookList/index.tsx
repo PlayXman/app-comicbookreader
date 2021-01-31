@@ -14,8 +14,7 @@ const BookList: React.FC = () => {
         comicBooks.map((book) => (
           <Grid key={book.key} item xs={12} sm={6} md={4}>
             <Book
-              title={book.title}
-              coverImageSrc={book.coverImage}
+              bookModel={book}
             />
           </Grid>
         ))

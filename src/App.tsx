@@ -9,6 +9,7 @@ import {DataProvider} from "./components/DataContext";
 import PrivateRoute from "./components/PrivateRoute";
 import Authentication from "./components/Authentication";
 import Layout from "./components/Layout";
+import Book from "./views/Book";
 
 // MUI Theme init
 const theme = createMuiTheme(config.theme);
@@ -24,6 +25,9 @@ function App() {
               <Switch>
                 <PrivateRoute exact path="/">
                   <Home/>
+                </PrivateRoute>
+                <PrivateRoute exact path="/book/:id">
+                  <Book/>
                 </PrivateRoute>
                 <Route path="/login">
                   <Login/>
