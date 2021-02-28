@@ -4,8 +4,8 @@ import {useContext} from "../components/DataContext";
 import BookModel from "../models/Book";
 import Loader from "../components/Loader";
 import Books from '../models/Books';
-import {Grid} from "@material-ui/core";
 import Navigation from "../components/Reader/Navigation";
+import Image from "../components/Reader/Image";
 
 const Book: React.FC = () => {
   const {id} = useParams<{ id: string }>();
@@ -66,23 +66,13 @@ const Book: React.FC = () => {
 
   return (
     <>
-      <Grid container>
-        <Grid item>
-          <div>Book id: {id}</div>
-          <div>Current page: {currentPageIndex}</div>
-        </Grid>
-        <Grid item xs>
-          <button onClick={handlePrev}>prev</button>
-          <button onClick={handleNext}>next</button>
-        </Grid>
-        <Grid item xs={12}>
-          {loading ? (
-            <Loader/>
-          ) : (
-            <img src={pageImageUrl} alt=""/>
-          )}
-        </Grid>
-      </Grid>
+      <div>
+        {loading ? (
+          <Loader/>
+        ) : (
+          <Image src={pageImageUrl}/>
+        )}
+      </div>
 
       <Navigation
         //todo hide until clicked
