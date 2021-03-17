@@ -1,12 +1,12 @@
 import Hammer from "hammerjs";
 
 class ImageViewer {
-  hammerTime: HammerManager;
-  wrapperEl: HTMLDivElement;
-  imageEl: HTMLImageElement;
-  setImageWidthHandler: Function;
+  private hammerTime: HammerManager;
+  private wrapperEl: HTMLDivElement;
+  private imageEl: HTMLImageElement;
+  private setImageWidthHandler: Function;
 
-  eventStartState = {
+  private eventStartState = {
     scroll: {
       top: 0,
       left: 0
@@ -16,12 +16,12 @@ class ImageViewer {
       y: 0
     }
   };
-  imageOriginalWidth: number;
+  private intervalObj: NodeJS.Timeout | null;
+  private isZooming: boolean;
+  private imageCurrentWidth: number;
 
-  intervalObj: NodeJS.Timeout | null;
-  isZooming: boolean;
-  wrapperWidth: number;
-  imageCurrentWidth: number;
+  private minimalWidth: number;
+  private maximalWidth: number;
 
   /**
    * @param wrapperEl Image's wrapper element
@@ -32,12 +32,11 @@ class ImageViewer {
     this.wrapperEl = wrapperEl;
     this.imageEl = imageEl;
     this.setImageWidthHandler = setImageWidth;
-    this.imageOriginalWidth = imageEl.naturalWidth;
-
     this.intervalObj = null;
     this.isZooming = false;
-    this.wrapperWidth = wrapperEl.offsetWidth;
-    this.imageCurrentWidth = this.wrapperWidth;
+    this.minimalWidth = this.calculateMinimalWidth();
+    this.maximalWidth = imageEl.naturalWidth;
+    this.imageCurrentWidth = this.minimalWidth;
 
     // hammer init
     this.hammerTime = new Hammer.Manager(this.wrapperEl);
@@ -58,10 +57,13 @@ class ImageViewer {
     this.hammerTime.on('zoomPressup', this.zoomPressupEventHandler);
 
     // wheel zoom
-    this.wrapperEl.addEventListener("wheel", this.wheelEventHandler);
+    this.wrapperEl.addEventListener('wheel', this.wheelEventHandler);
 
     // double click zoom
     this.hammerTime.on('zoomDoubleTap', this.zoomDoubleTapEventHandler);
+
+    // wrapper size fix
+    window.addEventListener("resize", this.windowResizeEventHandler);
   }
 
   /**
@@ -69,6 +71,8 @@ class ImageViewer {
    */
   stop() {
     this.hammerTime.destroy();
+    this.wrapperEl.removeEventListener('wheel', this.wheelEventHandler);
+    window.removeEventListener('resize', this.windowResizeEventHandler);
   }
 
   private zoomTo(newImageWidth: number, pointerX: number, pointerY: number) {
@@ -77,7 +81,7 @@ class ImageViewer {
     const scrollLeftOrigin =
       (this.wrapperEl.scrollLeft + pointerX) / this.wrapperEl.scrollWidth;
 
-    if (newImageWidth >= this.wrapperWidth && newImageWidth <= this.imageOriginalWidth) {
+    if (newImageWidth >= this.minimalWidth && newImageWidth <= this.maximalWidth) {
       this.imageCurrentWidth = newImageWidth;
       this.setImageWidthHandler(newImageWidth);
 
@@ -87,6 +91,19 @@ class ImageViewer {
         left: Math.round(this.wrapperEl.scrollWidth * scrollLeftOrigin) - pointerX
       });
     }
+  }
+
+  private calculateMinimalWidth(): number {
+    const wrapperW = this.wrapperEl.offsetWidth;
+    const wrapperH = this.wrapperEl.offsetHeight;
+    const imageW = this.imageEl.naturalWidth;
+    const imageH = this.imageEl.naturalHeight;
+
+    if ((wrapperW / imageW * imageH) > wrapperH) {
+      return Math.floor(wrapperH / imageH * imageW);
+    }
+
+    return wrapperW;
   }
 
   private panstartEventHandler = (event: HammerInput) => {
@@ -156,7 +173,12 @@ class ImageViewer {
   private wheelEventHandler = (event: WheelEvent) => {
     event.preventDefault();
 
-    const newWidth = this.imageCurrentWidth - Math.round(50 * event.deltaY);
+    let newWidth = this.imageCurrentWidth - Math.round(50 * event.deltaY);
+    if (newWidth > this.maximalWidth) {
+      newWidth = this.maximalWidth;
+    } else if (newWidth < this.minimalWidth) {
+      newWidth = this.minimalWidth;
+    }
 
     this.zoomTo(newWidth, event.x, event.y);
   }
@@ -167,12 +189,20 @@ class ImageViewer {
    */
   private zoomDoubleTapEventHandler = (event: HammerInput) => {
     const newWidth =
-      this.imageCurrentWidth > ((this.imageOriginalWidth - this.wrapperWidth) / 2) + this.wrapperWidth
-        ? this.wrapperWidth
-        : this.imageOriginalWidth;
+      this.imageCurrentWidth > ((this.maximalWidth - this.minimalWidth) / 2) + this.minimalWidth
+        ? this.minimalWidth
+        : this.maximalWidth;
 
     this.zoomTo(newWidth, event.center.x, event.center.y);
   };
+
+  /**
+   * Fixes size limits if viewport resizes
+   */
+  private windowResizeEventHandler = () => {
+    this.minimalWidth = this.calculateMinimalWidth();
+    this.zoomTo(this.minimalWidth, 0, 0);
+  }
 
 }
 

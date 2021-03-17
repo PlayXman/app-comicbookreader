@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     display: 'block',
     pointerEvents: 'none',
     objectFit: 'contain',
+    margin: 'auto'
   }
 });
 
