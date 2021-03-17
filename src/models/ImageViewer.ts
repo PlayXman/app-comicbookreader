@@ -71,15 +71,15 @@ class ImageViewer {
     this.hammerTime.destroy();
   }
 
-  private zoomScrollFix(newWidth: number, pointerX: number, pointerY: number) {
+  private zoomTo(newImageWidth: number, pointerX: number, pointerY: number) {
     const scrollTopOrigin =
       (this.wrapperEl.scrollTop + pointerY) / this.wrapperEl.scrollHeight;
     const scrollLeftOrigin =
       (this.wrapperEl.scrollLeft + pointerX) / this.wrapperEl.scrollWidth;
 
-    if (newWidth >= this.wrapperWidth && newWidth <= this.imageOriginalWidth) {
-      this.imageCurrentWidth = newWidth;
-      this.setImageWidthHandler(newWidth);
+    if (newImageWidth >= this.wrapperWidth && newImageWidth <= this.imageOriginalWidth) {
+      this.imageCurrentWidth = newImageWidth;
+      this.setImageWidthHandler(newImageWidth);
 
       this.wrapperEl.scrollTo({
         behavior: "auto",
@@ -105,7 +105,7 @@ class ImageViewer {
       //zoom
       const newWidth = this.imageCurrentWidth - Math.round(80 * event.velocityY);
 
-      this.zoomScrollFix(newWidth, this.eventStartState.pointer.x, this.eventStartState.pointer.y);
+      this.zoomTo(newWidth, this.eventStartState.pointer.x, this.eventStartState.pointer.y);
     } else {
       //move
       this.wrapperEl.scrollTo({
@@ -158,7 +158,7 @@ class ImageViewer {
 
     const newWidth = this.imageCurrentWidth - Math.round(50 * event.deltaY);
 
-    this.zoomScrollFix(newWidth, event.x, event.y);
+    this.zoomTo(newWidth, event.x, event.y);
   }
 
   /**
@@ -167,11 +167,11 @@ class ImageViewer {
    */
   private zoomDoubleTapEventHandler = (event: HammerInput) => {
     const newWidth =
-      this.imageCurrentWidth > this.imageOriginalWidth / 2
+      this.imageCurrentWidth > ((this.imageOriginalWidth - this.wrapperWidth) / 2) + this.wrapperWidth
         ? this.wrapperWidth
         : this.imageOriginalWidth;
 
-    this.zoomScrollFix(newWidth, event.center.x, event.center.y);
+    this.zoomTo(newWidth, event.center.x, event.center.y);
   };
 
 }
